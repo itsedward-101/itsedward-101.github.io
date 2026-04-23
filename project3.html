@@ -1,0 +1,729 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Predicting Credit Card Approval ? Case Study</title>
+  <meta name="description" content="Credit card approval prediction with ML classification, F-beta tuning, and fairness analysis ? BANA 273, UC Irvine." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700;1,9..40,400&family=Playfair+Display:ital,wght@0,500;0,600;0,700;1,500&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      --bg: #FAFAF7;
+      --primary: #2D6A4F;
+      --primary-dark: #1B4332;
+      --accent: #F4A261;
+      --text: #1A1A2E;
+      --text-muted: #6B7280;
+      --card: #FFFFFF;
+      --card-border: #E8E8E0;
+      --shadow: 0 2px 16px rgba(45, 106, 79, 0.08);
+      --shadow-hover: 0 8px 28px rgba(45, 106, 79, 0.12);
+      --radius: 14px;
+      --font-display: "Playfair Display", Georgia, serif;
+      --font-body: "DM Sans", system-ui, -apple-system, sans-serif;
+    }
+
+    *, *::before, *::after { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body {
+      margin: 0;
+      font-family: var(--font-body);
+      font-size: 17px;
+      line-height: 1.65;
+      color: var(--text);
+      background: var(--bg);
+      -webkit-font-smoothing: antialiased;
+    }
+    a { color: var(--primary); }
+    a:hover { text-decoration: underline; text-underline-offset: 3px; }
+
+    .container { width: min(1120px, 92vw); margin: 0 auto; }
+
+    .site-header {
+      position: sticky;
+      top: 0;
+      z-index: 50;
+      background: rgba(255, 255, 255, 0.92);
+      backdrop-filter: blur(10px);
+      border-bottom: 1px solid var(--card-border);
+    }
+    .nav {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 1rem 0;
+      gap: 1.5rem;
+    }
+    .logo {
+      font-family: var(--font-display);
+      font-weight: 600;
+      font-size: 1.25rem;
+      color: var(--text);
+      letter-spacing: -0.02em;
+      text-decoration: none;
+    }
+    .logo:hover { color: var(--primary); text-decoration: none; }
+    .nav-links {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.5rem 1.25rem;
+      list-style: none;
+      margin: 0;
+      padding: 0;
+      font-weight: 500;
+      font-size: 0.95rem;
+    }
+    .nav-links a {
+      color: var(--text);
+      padding: 0.35rem 0;
+      border-bottom: 2px solid transparent;
+      text-decoration: none;
+    }
+    .nav-links a:hover { color: var(--primary); }
+    .nav-links a.active {
+      color: var(--primary);
+      border-bottom-color: var(--accent);
+    }
+
+    .site-footer {
+      margin-top: 4rem;
+      padding: 2.5rem 0 3rem;
+      border-top: 1px solid var(--card-border);
+      background: #fff;
+      text-align: center;
+      color: var(--text-muted);
+      font-size: 0.95rem;
+    }
+    .footer-social {
+      display: flex;
+      justify-content: center;
+      gap: 1rem;
+      margin-top: 1rem;
+    }
+    .footer-social a {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 44px;
+      height: 44px;
+      border-radius: 999px;
+      background: var(--bg);
+      border: 1px solid var(--card-border);
+      color: var(--primary);
+      transition: transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease;
+    }
+    .footer-social a:hover {
+      transform: translateY(-2px);
+      box-shadow: var(--shadow);
+      border-color: rgba(45, 106, 79, 0.25);
+      text-decoration: none;
+    }
+    .footer-social svg { width: 20px; height: 20px; }
+
+    .back-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.35rem;
+      font-weight: 600;
+      font-size: 0.95rem;
+      text-decoration: none;
+      color: var(--primary);
+      margin-bottom: 1.5rem;
+      transition: color 0.2s ease, transform 0.2s ease;
+    }
+    .back-link:hover {
+      color: var(--primary-dark);
+      text-decoration: none;
+      transform: translateX(-2px);
+    }
+
+    .case-hero {
+      padding: 2rem 0 2.5rem;
+    }
+    .type-badge {
+      display: inline-block;
+      font-size: 0.72rem;
+      font-weight: 700;
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+      padding: 0.35rem 0.75rem;
+      border-radius: 999px;
+      background: rgba(45, 106, 79, 0.1);
+      color: var(--primary-dark);
+      border: 1px solid rgba(45, 106, 79, 0.18);
+      margin-bottom: 1rem;
+      line-height: 1.35;
+    }
+    .case-hero h1 {
+      font-family: var(--font-display);
+      font-size: clamp(1.85rem, 4vw, 2.65rem);
+      line-height: 1.12;
+      margin: 0 0 0.75rem;
+      letter-spacing: -0.02em;
+    }
+    .case-sub {
+      margin: 0 0 0.5rem;
+      max-width: 46rem;
+      color: var(--text-muted);
+      font-size: 1.08rem;
+    }
+    .course-line {
+      margin: 0 0 2rem;
+      font-size: 0.95rem;
+      font-weight: 600;
+      color: var(--primary-dark);
+    }
+
+    .stat-row {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 1rem;
+    }
+    @media (max-width: 700px) {
+      .stat-row { grid-template-columns: 1fr; }
+    }
+    .stat-card {
+      background: var(--card);
+      border: 1px solid var(--card-border);
+      border-radius: var(--radius);
+      padding: 1.25rem 1.35rem;
+      box-shadow: var(--shadow);
+      transition: transform 0.25s ease, box-shadow 0.25s ease, border-color 0.25s ease;
+    }
+    .stat-card:hover {
+      transform: translateY(-3px);
+      box-shadow: var(--shadow-hover);
+      border-color: rgba(45, 106, 79, 0.22);
+    }
+    .stat-card strong {
+      display: block;
+      font-family: var(--font-display);
+      font-size: 1.35rem;
+      color: var(--primary);
+      margin-bottom: 0.25rem;
+    }
+    .stat-card span {
+      font-size: 0.92rem;
+      color: var(--text-muted);
+    }
+
+    section.case-section {
+      padding: 2.75rem 0;
+      border-top: 1px solid var(--card-border);
+    }
+    .case-section h2 {
+      font-family: var(--font-display);
+      font-size: clamp(1.45rem, 2.5vw, 1.85rem);
+      margin: 0 0 1rem;
+      letter-spacing: -0.02em;
+    }
+    .case-section p {
+      margin: 0 0 1rem;
+      max-width: 48rem;
+      color: var(--text);
+    }
+    .case-section ul {
+      margin: 0.5rem 0 0;
+      padding-left: 1.2rem;
+      max-width: 48rem;
+      color: var(--text);
+    }
+    .case-section li { margin-bottom: 0.5rem; }
+    .case-section li:last-child { margin-bottom: 0; }
+
+    .info-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 1rem;
+      margin-top: 1.25rem;
+    }
+    .info-card {
+      background: var(--card);
+      border: 1px solid var(--card-border);
+      border-radius: var(--radius);
+      padding: 1.1rem 1.2rem;
+      box-shadow: var(--shadow);
+      transition: transform 0.2s ease, box-shadow 0.2s ease;
+    }
+    .info-card:hover {
+      transform: translateY(-2px);
+      box-shadow: var(--shadow-hover);
+    }
+    .info-card dt {
+      font-size: 0.75rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      color: var(--text-muted);
+      margin: 0 0 0.35rem;
+    }
+    .info-card dd {
+      margin: 0;
+      font-weight: 600;
+      font-size: 0.95rem;
+      color: var(--text);
+    }
+
+    .two-col {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1.5rem;
+      margin-top: 1.25rem;
+      align-items: start;
+    }
+    @media (max-width: 800px) {
+      .two-col { grid-template-columns: 1fr; }
+    }
+    .sub-block {
+      background: var(--card);
+      border: 1px solid var(--card-border);
+      border-radius: var(--radius);
+      padding: 1.35rem 1.4rem;
+      box-shadow: var(--shadow);
+      transition: transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease;
+    }
+    .sub-block:hover {
+      transform: translateY(-2px);
+      box-shadow: var(--shadow-hover);
+      border-color: rgba(45, 106, 79, 0.18);
+    }
+    .sub-block h3 {
+      font-family: var(--font-display);
+      font-size: 1.1rem;
+      margin: 0 0 0.75rem;
+      color: var(--primary-dark);
+    }
+    .sub-block p {
+      margin: 0;
+      font-size: 0.98rem;
+      color: var(--text);
+      max-width: none;
+    }
+
+    .table-wrap {
+      margin-top: 1.25rem;
+      overflow-x: auto;
+      border-radius: var(--radius);
+      border: 1px solid var(--card-border);
+      box-shadow: var(--shadow);
+      background: var(--card);
+    }
+    table.results {
+      width: 100%;
+      min-width: 560px;
+      border-collapse: collapse;
+      font-size: 0.92rem;
+    }
+    table.results thead th {
+      font-family: var(--font-display);
+      font-size: 0.88rem;
+      font-weight: 600;
+      text-align: left;
+      padding: 0.85rem 1rem;
+      background: rgba(45, 106, 79, 0.1);
+      color: var(--primary-dark);
+      border-bottom: 1px solid var(--card-border);
+      white-space: nowrap;
+    }
+    table.results tbody td {
+      padding: 0.75rem 1rem;
+      border-bottom: 1px solid var(--card-border);
+      color: var(--text);
+    }
+    table.results tbody tr:last-child td {
+      border-bottom: none;
+    }
+    table.results tbody tr:hover td {
+      background: rgba(45, 106, 79, 0.04);
+    }
+    table.results td:first-child {
+      font-weight: 600;
+      color: var(--text);
+    }
+
+    .bar-chart {
+      margin-top: 1.25rem;
+      display: flex;
+      flex-direction: column;
+      gap: 0.85rem;
+      max-width: 40rem;
+    }
+    .bar-item {
+      background: var(--card);
+      border: 1px solid var(--card-border);
+      border-radius: var(--radius);
+      padding: 0.85rem 1rem 0.95rem;
+      box-shadow: var(--shadow);
+      transition: transform 0.2s ease, box-shadow 0.2s ease;
+    }
+    .bar-item:hover {
+      transform: translateY(-2px);
+      box-shadow: var(--shadow-hover);
+    }
+    .bar-top {
+      display: flex;
+      justify-content: space-between;
+      align-items: baseline;
+      gap: 0.75rem;
+      margin-bottom: 0.45rem;
+      font-size: 0.92rem;
+    }
+    .bar-name { font-weight: 600; color: var(--text); }
+    .bar-coef {
+      font-weight: 700;
+      color: var(--primary);
+      font-variant-numeric: tabular-nums;
+      flex-shrink: 0;
+    }
+    .bar-track {
+      height: 10px;
+      border-radius: 999px;
+      background: rgba(45, 106, 79, 0.1);
+      overflow: hidden;
+    }
+    .bar-fill {
+      height: 100%;
+      border-radius: 999px;
+      background: linear-gradient(90deg, var(--primary), rgba(45, 106, 79, 0.75));
+      transition: width 0.6s ease;
+    }
+
+    .callout-amber {
+      margin-top: 1.25rem;
+      padding: 1.15rem 1.35rem;
+      border-radius: var(--radius);
+      background: linear-gradient(90deg, rgba(244, 162, 97, 0.22), rgba(244, 162, 97, 0.08));
+      border: 1px solid rgba(244, 162, 97, 0.4);
+      font-size: 0.98rem;
+      color: var(--text);
+    }
+    .callout-amber strong { color: var(--primary-dark); }
+    .callout-amber p { margin: 0 0 0.75rem; max-width: none; }
+    .callout-amber p:last-child { margin-bottom: 0; }
+    .callout-amber ul {
+      margin: 0.5rem 0 0;
+      padding-left: 1.2rem;
+      color: var(--text);
+    }
+
+    .tags {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.45rem;
+      margin-top: 1rem;
+    }
+    .tag {
+      display: inline-block;
+      padding: 0.35rem 0.75rem;
+      border-radius: 999px;
+      font-size: 0.78rem;
+      font-weight: 600;
+      background: rgba(45, 106, 79, 0.12);
+      color: var(--primary-dark);
+      border: 1px solid rgba(45, 106, 79, 0.15);
+    }
+
+    .btn-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.85rem;
+      margin-top: 1.5rem;
+    }
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.4rem;
+      padding: 0.8rem 1.35rem;
+      border-radius: 999px;
+      font-family: var(--font-body);
+      font-weight: 600;
+      font-size: 0.92rem;
+      cursor: pointer;
+      border: 2px solid transparent;
+      transition: transform 0.2s ease, box-shadow 0.2s ease, background 0.2s ease, border-color 0.2s ease;
+      text-decoration: none;
+    }
+    .btn:hover { text-decoration: none; transform: translateY(-2px); }
+    .btn-primary {
+      background: var(--primary);
+      color: #fff;
+      box-shadow: var(--shadow);
+    }
+    .btn-primary:hover {
+      background: var(--primary-dark);
+      box-shadow: var(--shadow-hover);
+    }
+    .btn-secondary {
+      background: transparent;
+      color: var(--primary);
+      border-color: rgba(45, 106, 79, 0.45);
+    }
+    .btn-secondary:hover {
+      border-color: var(--primary);
+      background: rgba(45, 106, 79, 0.06);
+      box-shadow: var(--shadow);
+    }
+
+    .reveal { opacity: 1; transform: none; }
+    @media (prefers-reduced-motion: no-preference) {
+      @supports (animation-timeline: view()) {
+        .reveal {
+          opacity: 0;
+          transform: translateY(14px);
+          animation: reveal-up 0.85s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+          animation-timeline: view();
+          animation-range: entry 0% cover 28%;
+        }
+        @keyframes reveal-up {
+          to { opacity: 1; transform: none; }
+        }
+      }
+    }
+  </style>
+</head>
+<body>
+  <header class="site-header">
+    <div class="container nav">
+      <a class="logo" href="index.html">Edward Dai</a>
+      <nav aria-label="Primary">
+        <ul class="nav-links">
+          <li><a href="index.html#about">About</a></li>
+          <li><a href="skills.html">Skills</a></li>
+          <li><a href="projects.html" class="active" aria-current="page">Projects</a></li>
+          <li><a href="resume.html">Resume</a></li>
+        </ul>
+      </nav>
+    </div>
+  </header>
+
+  <main>
+    <div class="container case-hero">
+      <a class="back-link" href="projects.html"> Back to Projects</a>
+      <span class="type-badge">Machine Learning -> Classification -> Fairness Analysis</span>
+      <h1>Predicting Credit Card Approval</h1>
+      <p class="case-sub">A predictive analytics framework for estimating approval outcomes, ranking drivers, and stress-testing fairness with interpretability for credit decision support.</p>
+      <p class="course-line">BANA 273 -> Machine Learning Analytics, UC Irvine</p>
+      <div class="stat-row reveal">
+        <div class="stat-card">
+          <strong>690</strong>
+          <span>applications in dataset</span>
+        </div>
+        <div class="stat-card">
+          <strong>10</strong>
+          <span>models compared</span>
+        </div>
+        <div class="stat-card">
+          <strong>F<sub style="font-size:0.75em;">β</sub></strong>
+          <span>threshold tuning (β = 2)</span>
+        </div>
+      </div>
+    </div>
+
+    <section class="case-section container reveal" aria-labelledby="problem-heading">
+      <h2 id="problem-heading">The Problem</h2>
+      <p>Financial institutions process thousands of credit applications manually. This project builds a predictive analytics framework to estimate whether a credit card application will be approved, identify the strongest approval drivers, and translate findings into actionable targeting insights ? while maintaining interpretability for credit decision support.</p>
+    </section>
+
+    <section class="case-section container reveal" aria-labelledby="data-heading">
+      <h2 id="data-heading">The Data</h2>
+      <dl class="info-grid">
+        <div class="info-card">
+          <dt>Dataset</dt>
+          <dd>Credit Card Approval Dataset (Kaggle)</dd>
+        </div>
+        <div class="info-card">
+          <dt>Observations</dt>
+          <dd>690</dd>
+        </div>
+        <div class="info-card">
+          <dt>Variables</dt>
+          <dd>16</dd>
+        </div>
+        <div class="info-card">
+          <dt>Target</dt>
+          <dd>Approved (binary: 1 = approved, 0 = denied)</dd>
+        </div>
+        <div class="info-card">
+          <dt>Class split</dt>
+          <dd>~44.5% approved / ~55.5% denied</dd>
+        </div>
+        <div class="info-card">
+          <dt>Key predictors</dt>
+          <dd>PriorDefault, CreditScore, Income, Debt, YearsEmployed, Employed, BankCustomer, Industry, Ethnicity</dd>
+        </div>
+      </dl>
+    </section>
+
+    <section class="case-section container reveal" aria-labelledby="fe-heading">
+      <h2 id="fe-heading">Feature Engineering</h2>
+      <ul>
+        <li>Removed low-signal variables: Age, Gender, DriversLicense, ZipCode, MaritalStatus, Citizenship</li>
+        <li>Credit score binning: decision-tree-based binning into 4 interpretable tiers (Poor, Low, Moderate, High)</li>
+        <li>Income transformation: log transformation to reduce skew from 13.14 to 0.51</li>
+        <li>Interaction terms: retained Debt Moderate Credit Score and YearsEmployed Log Income after likelihood ratio testing</li>
+      </ul>
+    </section>
+
+    <section class="case-section container reveal" aria-labelledby="models-heading">
+      <h2 id="models-heading">Models Compared (10 total)</h2>
+      <p>Baseline Logistic Regression, LASSO, Ridge, Elastic Net, Naive Bayes, Decision Tree, Random Forest, XGBoost, SVM Linear, and SVM RBF.</p>
+      <p><strong>Threshold tuning:</strong> Used F-beta (β = 2) cross-validated threshold optimization to prioritize recall of approved applicants over the default 0.5 cutoff.</p>
+    </section>
+
+    <section class="case-section container reveal" aria-labelledby="results-heading">
+      <h2 id="results-heading">Results</h2>
+      <div class="table-wrap" role="region" aria-label="Model comparison results">
+        <table class="results">
+          <thead>
+            <tr>
+              <th scope="col">Model</th>
+              <th scope="col">Accuracy</th>
+              <th scope="col">Recall</th>
+              <th scope="col">ROC-AUC</th>
+              <th scope="col">Test F<sub>β</sub></th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>LASSO Logistic Regression</td>
+              <td>89.9%</td>
+              <td>93.4%</td>
+              <td>0.959</td>
+              <td>0.916</td>
+            </tr>
+            <tr>
+              <td>Random Forest</td>
+              <td>87.7%</td>
+              <td>100%</td>
+              <td>0.952</td>
+              <td>0.947</td>
+            </tr>
+            <tr>
+              <td>XGBoost</td>
+              <td>89.1%</td>
+              <td>98.4%</td>
+              <td>0.959</td>
+              <td>0.943</td>
+            </tr>
+            <tr>
+              <td>Decision Tree</td>
+              <td>77.5%</td>
+              <td>100%</td>
+              <td>0.948</td>
+              <td>0.908</td>
+            </tr>
+            <tr>
+              <td>Baseline Logistic</td>
+              <td>87.0%</td>
+              <td>88.5%</td>
+              <td>0.951</td>
+              <td>0.874</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <section class="case-section container reveal" aria-labelledby="dual-heading">
+      <h2 id="dual-heading">Dual Model Approach</h2>
+      <div class="two-col">
+        <div class="sub-block">
+          <h3>Random Forest</h3>
+          <p><strong>Best predictive model</strong> ? 100% recall, highest F<sub>?</sub> (0.947). Captures nonlinear relationships and interactions.</p>
+        </div>
+        <div class="sub-block">
+          <h3>LASSO</h3>
+          <p><strong>Best interpretable model</strong> ? automatic feature selection, clear coefficients, AUC 0.959.</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="case-section container reveal" aria-labelledby="lasso-heading">
+      <h2 id="lasso-heading">Top LASSO Features</h2>
+      <p style="max-width:40rem;color:var(--text-muted);font-size:0.95rem;margin-bottom:0;">Ranked by coefficient magnitude (bar length proportional to strength).</p>
+      <div class="bar-chart" aria-label="LASSO coefficient ranking">
+        <div class="bar-item">
+          <div class="bar-top"><span class="bar-name">1. PriorDefault</span><span class="bar-coef">1.387</span></div>
+          <div class="bar-track"><div class="bar-fill" style="width:100%"></div></div>
+        </div>
+        <div class="bar-item">
+          <div class="bar-top"><span class="bar-name">2. CreditScore_High</span><span class="bar-coef">0.438</span></div>
+          <div class="bar-track"><div class="bar-fill" style="width:31.6%"></div></div>
+        </div>
+        <div class="bar-item">
+          <div class="bar-top"><span class="bar-name">3. Debt * Moderate Credit Score</span><span class="bar-coef">0.430</span></div>
+          <div class="bar-track"><div class="bar-fill" style="width:31%"></div></div>
+        </div>
+        <div class="bar-item">
+          <div class="bar-top"><span class="bar-name">4. Income_log</span><span class="bar-coef">0.417</span></div>
+          <div class="bar-track"><div class="bar-fill" style="width:30.1%"></div></div>
+        </div>
+        <div class="bar-item">
+          <div class="bar-top"><span class="bar-name">5. BankCustomer</span><span class="bar-coef">0.258</span></div>
+          <div class="bar-track"><div class="bar-fill" style="width:18.6%"></div></div>
+        </div>
+        <div class="bar-item">
+          <div class="bar-top"><span class="bar-name">6. Employed</span><span class="bar-coef">0.235</span></div>
+          <div class="bar-track"><div class="bar-fill" style="width:16.9%"></div></div>
+        </div>
+        <div class="bar-item">
+          <div class="bar-top"><span class="bar-name">7. YearsEmployed</span><span class="bar-coef">0.133</span></div>
+          <div class="bar-track"><div class="bar-fill" style="width:9.6%"></div></div>
+        </div>
+      </div>
+      <p style="margin-top:1rem;font-size:0.92rem;color:var(--text-muted);max-width:40rem;"><strong>Note:</strong> PriorDefault is the strongest driver by far.</p>
+    </section>
+
+    <section class="case-section container reveal" aria-labelledby="fairness-heading">
+      <h2 id="fairness-heading">Fairness Analysis</h2>
+      <div class="callout-amber">
+        <p>Latino applicants had a raw approval rate of ~14% vs ~42% for White applicants.</p>
+        <p>After controlling for financial variables, Latino coefficient = 1.385, odds ratio = 0.25, <em>p</em> = 0.019.</p>
+        <p><strong>Conclusion:</strong> Disparity exists in observed outcomes; financial profile differences explain part of the gap, but a residual signal remains ? warrants further review before production deployment.</p>
+        <p><strong>Industry:</strong> Disparities also found: Utilities (~84% approval) vs Healthcare (~13%) ? largely explained by underlying financial profiles.</p>
+      </div>
+    </section>
+
+    <section class="case-section container reveal" aria-labelledby="role-heading">
+      <h2 id="role-heading">My Contribution</h2>
+      <p>Feature engineering pipeline (credit score binning, income log transformation, interaction term selection via likelihood ratio tests), fairness/bias diagnostic analysis, model comparison write-up.</p>
+    </section>
+
+    <section class="case-section container reveal" aria-labelledby="tools-heading">
+      <h2 id="tools-heading">Tools</h2>
+      <div class="tags">
+        <span class="tag">Python</span>
+        <span class="tag">pandas</span>
+        <span class="tag">scikit-learn</span>
+        <span class="tag">XGBoost</span>
+        <span class="tag">statsmodels</span>
+        <span class="tag">matplotlib</span>
+        <span class="tag">seaborn</span>
+        <span class="tag">Jupyter</span>
+      </div>
+      <div class="btn-row">
+        <a class="btn btn-primary" href="https://github.com/itsedward-101/Predictive-Analytics--MSBA">View Code on GitHub</a>
+        <a class="btn btn-secondary" href="#">View Presentation Slides</a>
+        <a class="btn btn-secondary" href="#">Read Technical Report</a>
+      </div>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <div class="container">
+      <p style="margin:0;">Built by Edward Dai 2026</p>
+      <div class="footer-social">
+        <a href="https://www.linkedin.com/in/edward-dai1/" aria-label="LinkedIn" target="_blank" rel="noopener noreferrer">
+          <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433c-1.144 0-2.063-.926-2.063-2.065 0-1.138.92-2.063 2.063-2.063 1.14 0 2.064.925 2.064 2.063 0 1.139-.925 2.065-2.064 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/></svg>
+        </a>
+        <a href="mailto:edward300912@gmail.com" aria-label="Email">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+        </a>
+      </div>
+    </div>
+  </footer>
+</body>
+</html>

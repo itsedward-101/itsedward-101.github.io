@@ -1,0 +1,309 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Skills &amp; Toolbox � Edward Dai</title>
+  <meta name="description" content="Product, business analysis, tools, and soft skills � Edward Dai." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700;1,9..40,400&family=Playfair+Display:ital,wght@0,500;0,600;0,700;1,500&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      --bg: #FAFAF7;
+      --primary: #2D6A4F;
+      --primary-dark: #1B4332;
+      --accent: #F4A261;
+      --text: #1A1A2E;
+      --text-muted: #6B7280;
+      --card: #FFFFFF;
+      --card-border: #E8E8E0;
+      --shadow: 0 2px 16px rgba(45, 106, 79, 0.08);
+      --shadow-hover: 0 8px 28px rgba(45, 106, 79, 0.12);
+      --radius: 14px;
+      --font-display: "Playfair Display", Georgia, serif;
+      --font-body: "DM Sans", system-ui, -apple-system, sans-serif;
+    }
+
+    *, *::before, *::after { box-sizing: border-box; }
+    body {
+      margin: 0;
+      font-family: var(--font-body);
+      font-size: 17px;
+      line-height: 1.65;
+      color: var(--text);
+      background: var(--bg);
+      -webkit-font-smoothing: antialiased;
+    }
+    a { color: var(--primary); text-decoration: none; }
+    a:hover { text-decoration: underline; text-underline-offset: 3px; }
+
+    .container { width: min(1120px, 92vw); margin: 0 auto; }
+
+    .site-header {
+      position: sticky;
+      top: 0;
+      z-index: 50;
+      background: rgba(255, 255, 255, 0.92);
+      backdrop-filter: blur(10px);
+      border-bottom: 1px solid var(--card-border);
+    }
+    .nav {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 1rem 0;
+      gap: 1.5rem;
+    }
+    .logo {
+      font-family: var(--font-display);
+      font-weight: 600;
+      font-size: 1.25rem;
+      color: var(--text);
+      letter-spacing: -0.02em;
+    }
+    .logo:hover { text-decoration: none; color: var(--primary); }
+    .nav-links {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.5rem 1.25rem;
+      list-style: none;
+      margin: 0;
+      padding: 0;
+      font-weight: 500;
+      font-size: 0.95rem;
+    }
+    .nav-links a {
+      color: var(--text);
+      padding: 0.35rem 0;
+      border-bottom: 2px solid transparent;
+      text-decoration: none;
+    }
+    .nav-links a:hover { color: var(--primary); }
+    .nav-links a.active {
+      color: var(--primary);
+      border-bottom-color: var(--accent);
+    }
+
+    .site-footer {
+      margin-top: 4rem;
+      padding: 2.5rem 0 3rem;
+      border-top: 1px solid var(--card-border);
+      background: #fff;
+      text-align: center;
+      color: var(--text-muted);
+      font-size: 0.95rem;
+    }
+    .footer-social {
+      display: flex;
+      justify-content: center;
+      gap: 1rem;
+      margin-top: 1rem;
+    }
+    .footer-social a {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 44px;
+      height: 44px;
+      border-radius: 999px;
+      background: var(--bg);
+      border: 1px solid var(--card-border);
+      color: var(--primary);
+      transition: transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease;
+    }
+    .footer-social a:hover {
+      transform: translateY(-2px);
+      box-shadow: var(--shadow);
+      border-color: rgba(45, 106, 79, 0.25);
+      text-decoration: none;
+    }
+    .footer-social svg { width: 20px; height: 20px; }
+
+    .page-hero {
+      padding: 3.25rem 0 2rem;
+    }
+    .page-hero h1 {
+      font-family: var(--font-display);
+      font-size: clamp(2rem, 4vw, 2.75rem);
+      margin: 0 0 0.75rem;
+      letter-spacing: -0.02em;
+    }
+    .page-hero p {
+      margin: 0;
+      max-width: 36rem;
+      color: var(--text-muted);
+      font-size: 1.05rem;
+    }
+
+    .skills-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 1.5rem;
+      padding: 1rem 0 3rem;
+    }
+    @media (max-width: 800px) {
+      .skills-grid { grid-template-columns: 1fr; }
+    }
+
+    .skill-card {
+      background: var(--card);
+      border: 1px solid var(--card-border);
+      border-radius: var(--radius);
+      padding: 1.6rem 1.65rem 1.5rem;
+      box-shadow: var(--shadow);
+      transition: transform 0.25s ease, box-shadow 0.25s ease, border-color 0.25s ease;
+    }
+    .skill-card:hover {
+      transform: translateY(-4px);
+      box-shadow: var(--shadow-hover);
+      border-color: rgba(45, 106, 79, 0.22);
+    }
+    .skill-card h2 {
+      font-family: var(--font-display);
+      font-size: 1.35rem;
+      margin: 0 0 1rem;
+    }
+    .tags {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.5rem;
+    }
+    .tag {
+      display: inline-block;
+      padding: 0.4rem 0.85rem;
+      border-radius: 999px;
+      font-size: 0.82rem;
+      font-weight: 600;
+      background: rgba(45, 106, 79, 0.12);
+      color: var(--primary-dark);
+      border: 1px solid rgba(45, 106, 79, 0.15);
+    }
+
+    .learning-banner {
+      margin: 0 0 4rem;
+      padding: 1.15rem 1.5rem;
+      border-radius: var(--radius);
+      background: linear-gradient(90deg, rgba(244, 162, 97, 0.2), rgba(244, 162, 97, 0.08));
+      border: 1px solid rgba(244, 162, 97, 0.35);
+      color: var(--text);
+      font-size: 0.95rem;
+    }
+    .learning-banner strong {
+      color: var(--primary-dark);
+      font-weight: 600;
+    }
+
+    .reveal { opacity: 1; transform: none; }
+    @media (prefers-reduced-motion: no-preference) {
+      @supports (animation-timeline: view()) {
+        .reveal {
+          opacity: 0;
+          transform: translateY(14px);
+          animation: reveal-up 0.85s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+          animation-timeline: view();
+          animation-range: entry 0% cover 30%;
+        }
+        @keyframes reveal-up {
+          to { opacity: 1; transform: none; }
+        }
+      }
+    }
+  </style>
+</head>
+<body>
+  <header class="site-header">
+    <div class="container nav">
+      <a class="logo" href="index.html">Edward Dai</a>
+      <nav aria-label="Primary">
+        <ul class="nav-links">
+          <li><a href="index.html#about">About</a></li>
+          <li><a href="skills.html" class="active" aria-current="page">Skills</a></li>
+          <li><a href="projects.html">Projects</a></li>
+          <li><a href="resume.html">Resume</a></li>
+        </ul>
+      </nav>
+    </div>
+  </header>
+
+  <main>
+    <div class="container page-hero reveal">
+      <h1>Skills &amp; Toolbox</h1>
+      <p>A mix of product thinking, analytical tools, and technical fluency.</p>
+    </div>
+
+    <div class="container skills-grid">
+      <article class="skill-card reveal">
+        <h2>Product Management</h2>
+        <div class="tags">
+          <span class="tag">User Research</span>
+          <span class="tag">PRD Writing</span>
+          <span class="tag">Roadmapping</span>
+          <span class="tag">Agile / Scrum</span>
+          <span class="tag">Stakeholder Management</span>
+          <span class="tag">A/B Testing</span>
+          <span class="tag">Wireframing</span>
+          <span class="tag">Go-To-Market Strategy</span>
+        </div>
+      </article>
+      <article class="skill-card reveal">
+        <h2>Business Analysis</h2>
+        <div class="tags">
+          <span class="tag">Requirements Gathering</span>
+          <span class="tag">Process Mapping</span>
+          <span class="tag">Data Analysis</span>
+          <span class="tag">User Stories</span>
+          <span class="tag">Gap Analysis</span>
+          <span class="tag">BPMN</span>
+          <span class="tag">UAT</span>
+        </div>
+      </article>
+      <article class="skill-card reveal">
+        <h2>Tools &amp; Software</h2>
+        <div class="tags">
+          <span class="tag">Figma</span>
+          <span class="tag">Jira</span>
+          <span class="tag">Confluence</span>
+          <span class="tag">Notion</span>
+          <span class="tag">SQL</span>
+          <span class="tag">Excel / Google Sheets</span>
+          <span class="tag">Miro</span>
+          <span class="tag">Tableau</span>
+          <span class="tag">Jupter notebook</span>
+        </div>
+      </article>
+      <article class="skill-card reveal">
+        <h2>Soft Skills</h2>
+        <div class="tags">
+          <span class="tag">Communication</span>
+          <span class="tag">Problem Solving</span>
+          <span class="tag">Cross-functional Collaboration</span>
+          <span class="tag">Prioritization</span>
+          <span class="tag">Presentation</span>
+        </div>
+      </article>
+    </div>
+
+    <div class="container reveal">
+      <p class="learning-banner">
+        <strong>Currently deepening my knowledge in:</strong>
+        Python, SQL, Product Analytics, Healthcare Tech, Enterprise SaaS
+      </p>
+    </div>
+  </main>
+
+  <footer class="site-footer">
+    <div class="container">
+      <p style="margin:0;">Built by Edward Dai 2026</p>
+      <div class="footer-social">
+        <a href="https://www.linkedin.com/in/edward-dai1/" aria-label="LinkedIn" target="_blank" rel="noopener noreferrer">
+          <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433c-1.144 0-2.063-.926-2.063-2.065 0-1.138.92-2.063 2.063-2.063 1.14 0 2.064.925 2.064 2.063 0 1.139-.925 2.065-2.064 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/></svg>
+        </a>
+        <a href="mailto:edward300912@gmail.com" aria-label="Email">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+        </a>
+      </div>
+    </div>
+  </footer>
+</body>
+</html>

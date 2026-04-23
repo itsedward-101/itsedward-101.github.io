@@ -1,0 +1,471 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Edward Dai � Product &amp; Business Analysis</title>
+  <meta name="description" content="Portfolio of Edward Dai � aspiring Product Manager and Business Analyst." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700;1,9..40,400&family=Playfair+Display:ital,wght@0,500;0,600;0,700;1,500&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      --bg: #FAFAF7;
+      --primary: #2D6A4F;
+      --primary-dark: #1B4332;
+      --accent: #F4A261;
+      --text: #1A1A2E;
+      --text-muted: #6B7280;
+      --card: #FFFFFF;
+      --card-border: #E8E8E0;
+      --shadow: 0 2px 16px rgba(45, 106, 79, 0.08);
+      --shadow-hover: 0 8px 28px rgba(45, 106, 79, 0.12);
+      --radius: 14px;
+      --font-display: "Playfair Display", Georgia, serif;
+      --font-body: "DM Sans", system-ui, -apple-system, sans-serif;
+    }
+
+    *, *::before, *::after { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body {
+      margin: 0;
+      font-family: var(--font-body);
+      font-size: 17px;
+      line-height: 1.65;
+      color: var(--text);
+      background: var(--bg);
+      -webkit-font-smoothing: antialiased;
+    }
+
+    a { color: var(--primary); text-decoration: none; }
+    a:hover { text-decoration: underline; text-underline-offset: 3px; }
+
+    .container {
+      width: min(1120px, 92vw);
+      margin: 0 auto;
+    }
+
+    /* Nav */
+    .site-header {
+      position: sticky;
+      top: 0;
+      z-index: 50;
+      background: rgba(255, 255, 255, 0.92);
+      backdrop-filter: blur(10px);
+      border-bottom: 1px solid var(--card-border);
+    }
+    .nav {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 1rem 0;
+      gap: 1.5rem;
+    }
+    .logo {
+      font-family: var(--font-display);
+      font-weight: 600;
+      font-size: 1.25rem;
+      color: var(--text);
+      letter-spacing: -0.02em;
+    }
+    .logo:hover { text-decoration: none; color: var(--primary); }
+    .nav-links {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.5rem 1.25rem;
+      list-style: none;
+      margin: 0;
+      padding: 0;
+      font-weight: 500;
+      font-size: 0.95rem;
+    }
+    .nav-links a {
+      color: var(--text);
+      padding: 0.35rem 0;
+      border-bottom: 2px solid transparent;
+      text-decoration: none;
+    }
+    .nav-links a:hover { color: var(--primary); }
+    .nav-links a.active {
+      color: var(--primary);
+      border-bottom-color: var(--accent);
+    }
+
+    /* Footer */
+    .site-footer {
+      margin-top: 5rem;
+      padding: 2.5rem 0 3rem;
+      border-top: 1px solid var(--card-border);
+      background: #fff;
+      text-align: center;
+      color: var(--text-muted);
+      font-size: 0.95rem;
+    }
+    .footer-social {
+      display: flex;
+      justify-content: center;
+      gap: 1rem;
+      margin-top: 1rem;
+    }
+    .footer-social a {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 44px;
+      height: 44px;
+      border-radius: 999px;
+      background: var(--bg);
+      border: 1px solid var(--card-border);
+      color: var(--primary);
+      transition: transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease;
+    }
+    .footer-social a:hover {
+      transform: translateY(-2px);
+      box-shadow: var(--shadow);
+      border-color: rgba(45, 106, 79, 0.25);
+      text-decoration: none;
+    }
+    .footer-social svg { width: 20px; height: 20px; }
+
+    /* Buttons */
+    .btn-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 1rem;
+      margin-top: 2rem;
+    }
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.5rem;
+      padding: 0.85rem 1.5rem;
+      border-radius: 999px;
+      font-family: var(--font-body);
+      font-weight: 600;
+      font-size: 0.95rem;
+      cursor: pointer;
+      border: 2px solid transparent;
+      transition: transform 0.2s ease, box-shadow 0.2s ease, background 0.2s ease, color 0.2s ease, border-color 0.2s ease;
+      text-decoration: none;
+    }
+    .btn:hover { text-decoration: none; transform: translateY(-2px); }
+    .btn-primary {
+      background: var(--primary);
+      color: #fff;
+      box-shadow: var(--shadow);
+    }
+    .btn-primary:hover {
+      background: var(--primary-dark);
+      box-shadow: var(--shadow-hover);
+    }
+    .btn-secondary {
+      background: transparent;
+      color: var(--primary);
+      border-color: rgba(45, 106, 79, 0.45);
+    }
+    .btn-secondary:hover {
+      border-color: var(--primary);
+      background: rgba(45, 106, 79, 0.06);
+      box-shadow: var(--shadow);
+    }
+
+    /* Hero */
+    .hero {
+      padding: 3.5rem 0 4rem;
+    }
+    .hero-grid {
+      display: grid;
+      grid-template-columns: 1.15fr 0.85fr;
+      gap: 3rem;
+      align-items: center;
+    }
+    @media (max-width: 900px) {
+      .hero-grid { grid-template-columns: 1fr; }
+    }
+    .hero-kicker {
+      font-size: 0.9rem;
+      font-weight: 600;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--primary);
+      margin-bottom: 0.75rem;
+    }
+    .hero h1 {
+      font-family: var(--font-display);
+      font-weight: 600;
+      font-size: clamp(2.5rem, 4vw, 56px);
+      line-height: 1.1;
+      margin: 0 0 0.75rem;
+      letter-spacing: -0.02em;
+    }
+    .hero-tagline {
+      font-family: var(--font-display);
+      font-style: italic;
+      font-size: clamp(1.2rem, 2.5vw, 1.45rem);
+      color: var(--text-muted);
+      margin: 0 0 1.25rem;
+    }
+    .hero-bio {
+      max-width: 38rem;
+      color: var(--text);
+      margin: 0;
+    }
+
+    /* Hero visual */
+    .hero-art {
+      position: relative;
+      height: min(380px, 55vw);
+      min-height: 260px;
+      border-radius: var(--radius);
+      background: linear-gradient(145deg, rgba(45, 106, 79, 0.08), rgba(244, 162, 97, 0.12));
+      overflow: hidden;
+      border: 1px solid var(--card-border);
+      box-shadow: var(--shadow);
+    }
+    .blob {
+      position: absolute;
+      border-radius: 50%;
+      filter: blur(0);
+    }
+    .blob-1 {
+      width: 72%;
+      height: 72%;
+      right: -8%;
+      top: -12%;
+      background: radial-gradient(circle at 35% 35%, rgba(244, 162, 97, 0.55), rgba(244, 162, 97, 0.1));
+      opacity: 0.9;
+    }
+    .blob-2 {
+      width: 58%;
+      height: 58%;
+      left: -6%;
+      bottom: -10%;
+      background: radial-gradient(circle at 50% 50%, rgba(45, 106, 79, 0.35), rgba(45, 106, 79, 0.05));
+    }
+    .blob-3 {
+      width: 38%;
+      height: 38%;
+      left: 28%;
+      top: 18%;
+      background: rgba(255, 255, 255, 0.75);
+      border: 1px solid rgba(45, 106, 79, 0.12);
+      box-shadow: inset 0 0 40px rgba(244, 162, 97, 0.15);
+    }
+    .blob-ring {
+      width: 52%;
+      height: 52%;
+      right: 12%;
+      bottom: 8%;
+      border: 3px solid rgba(45, 106, 79, 0.22);
+      background: transparent;
+    }
+
+    /* Sections */
+    section { padding: 3.5rem 0; }
+    .section-title {
+      font-family: var(--font-display);
+      font-size: clamp(1.75rem, 3vw, 2.25rem);
+      margin: 0 0 1.25rem;
+      letter-spacing: -0.02em;
+    }
+    .section-lead {
+      max-width: 42rem;
+      color: var(--text-muted);
+      margin: 0 0 2rem;
+    }
+
+    /* Cards */
+    .card {
+      background: var(--card);
+      border: 1px solid var(--card-border);
+      border-radius: var(--radius);
+      padding: 1.5rem 1.6rem;
+      box-shadow: var(--shadow);
+      transition: transform 0.25s ease, box-shadow 0.25s ease, border-color 0.25s ease;
+    }
+    .card:hover {
+      transform: translateY(-4px);
+      box-shadow: var(--shadow-hover);
+      border-color: rgba(45, 106, 79, 0.22);
+    }
+
+    .highlight-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 1.25rem;
+      margin-top: 2rem;
+    }
+    @media (max-width: 768px) {
+      .highlight-grid { grid-template-columns: 1fr; }
+    }
+    .highlight-icon {
+      font-size: 1.75rem;
+      line-height: 1;
+      margin-bottom: 0.75rem;
+    }
+    .highlight-stat {
+      font-family: var(--font-display);
+      font-size: 1.65rem;
+      font-weight: 600;
+      color: var(--primary);
+      margin: 0 0 0.25rem;
+    }
+    .highlight-label {
+      margin: 0;
+      color: var(--text-muted);
+      font-size: 0.95rem;
+    }
+
+    .bring-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 1.5rem;
+      margin-top: 2rem;
+    }
+    @media (max-width: 900px) {
+      .bring-grid { grid-template-columns: 1fr; }
+    }
+    .bring-card h3 {
+      font-family: var(--font-display);
+      font-size: 1.2rem;
+      margin: 0.5rem 0 0.5rem;
+    }
+    .bring-card p {
+      margin: 0;
+      color: var(--text-muted);
+      font-size: 0.98rem;
+    }
+    .bring-icon {
+      width: 48px;
+      height: 48px;
+      border-radius: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: rgba(45, 106, 79, 0.1);
+      color: var(--primary);
+      font-size: 1.35rem;
+    }
+
+    /* Scroll reveal */
+    .reveal {
+      opacity: 1;
+      transform: none;
+    }
+    @media (prefers-reduced-motion: no-preference) {
+      @supports (animation-timeline: view()) {
+        .reveal {
+          opacity: 0;
+          transform: translateY(14px);
+          animation: reveal-up 0.85s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+          animation-timeline: view();
+          animation-range: entry 0% cover 32%;
+        }
+        @keyframes reveal-up {
+          to { opacity: 1; transform: none; }
+        }
+      }
+    }
+  </style>
+</head>
+<body>
+  <header class="site-header">
+    <div class="container nav">
+      <a class="logo" href="index.html">Edward Dai</a>
+      <nav aria-label="Primary">
+        <ul class="nav-links">
+          <li><a href="#about" class="active" aria-current="page">About</a></li>
+          <li><a href="skills.html">Skills</a></li>
+          <li><a href="projects.html">Projects</a></li>
+        </ul>
+      </nav>
+    </div>
+  </header>
+
+  <main>
+    <section class="hero container">
+      <div class="hero-grid">
+        <div>
+          <p class="hero-kicker">Irvine, United States</p>
+          <h1>Hi, I'm Edward Dai</h1>
+          <p class="hero-tagline">Aspiring Product Manager &amp; Business Analyst</p>
+          <p class="hero-bio">
+            I'm a final-year student who enjoys turning messy problems into clear decisions. I care about how products feel in real life not just in slides and I'm building the craft of discovery, prioritisation, and stakeholder alignment. I'm actively looking for roles where I can learn from strong PM and BA mentors while contributing from day one.
+          </p>
+          <div class="btn-row">
+            <a class="btn btn-primary" href="projects.html">View My Projects</a>
+            <a class="btn btn-secondary" href="file:///Users/ed/Desktop/Job%20application/US/Cali/Busines%20Analytics/Edward%20Dai's%20resume%20%20.pdf" download>Download Resume</a>
+          </div>
+        </div>
+        <div class="hero-art" aria-hidden="true">
+          <div class="blob blob-1"></div>
+          <div class="blob blob-2"></div>
+          <div class="blob blob-3"></div>
+          <div class="blob blob-ring"></div>
+        </div>
+      </div>
+    </section>
+
+    <section class="container reveal" id="about">
+      <h2 class="section-title">About Me</h2>
+      <p class="section-lead" style="margin-bottom: 0; color: var(--text); max-width: 48rem;">
+        My background blends quantitative coursework with hands-on building: I've led discovery for student-facing products, mapped workflows with teams under tight deadlines, and prototyped ideas in Figma to make trade-offs tangible. Outside class, I read about healthcare and enterprise SaaS because I'm curious where complex regulation meets human behaviour. I'm aiming for a career at the intersection of strategy, empathy, and execution whether that's as a Product Manager or Business Analyst.
+      </p>
+      <div class="highlight-grid">
+        <article class="card">
+          <div class="highlight-icon" aria-hidden="true">🛠️ </div>
+          <p class="highlight-stat">6+</p>
+          <p class="highlight-label">Projects Built</p>
+        </article>
+        <article class="card">
+          <div class="highlight-icon" aria-hidden="true">🌐</div>
+          <p class="highlight-stat">5</p>
+          <p class="highlight-label">Industries Explored</p>
+        </article>
+        <article class="card">
+          <div class="highlight-icon" aria-hidden="true">📚</div>
+          <p class="highlight-stat">∞</p>
+          <p class="highlight-label">Always Learning</p>
+        </article>
+      </div>
+    </section>
+
+    <section class="container reveal" style="padding-bottom: 4rem;">
+      <h2 class="section-title">What I Bring to the Table</h2>
+      <p class="section-lead">Principles I return to when work gets ambiguous.</p>
+      <div class="bring-grid">
+        <article class="card bring-card">
+          <div class="bring-icon" aria-hidden="true">?</div>
+          <h3>Product Thinking</h3>
+          <p>I identify user problems before jumping to solutions, and I write assumptions down so the team can test them.</p>
+        </article>
+        <article class="card bring-card">
+          <div class="bring-icon" aria-hidden="true">?</div>
+          <h3>Analytical Mindset</h3>
+          <p>I back decisions with data and structured frameworks, and I'm comfortable saying "we don't know yet" when evidence is thin.</p>
+        </article>
+        <article class="card bring-card">
+          <div class="bring-icon" aria-hidden="true">?</div>
+          <h3>Technical Fluency</h3>
+          <p>I speak the language of both business and engineering enough to unblock conversations and spot feasibility risks early.</p>
+        </article>
+      </div>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <div class="container">
+      <p style="margin:0;">Built by Edward Dai � 2026</p>
+      <div class="footer-social">
+        <a href="https://www.linkedin.com/in/edward-dai1/" aria-label="LinkedIn" target="_blank" rel="noopener noreferrer">
+          <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433c-1.144 0-2.063-.926-2.063-2.065 0-1.138.92-2.063 2.063-2.063 1.14 0 2.064.925 2.064 2.063 0 1.139-.925 2.065-2.064 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/></svg>
+        </a>
+        <a href="mailto:edward300912@gmail.com" aria-label="Email">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+        </a>
+      </div>
+    </div>
+  </footer>
+</body>
+</html>
